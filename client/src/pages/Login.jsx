@@ -13,11 +13,11 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('https://your-backend-api/login', { email, password });
+      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
       
-      // Store user data or token in local storage if needed
+      
       localStorage.setItem('token', response.data.token);
-      
+      localStorage.setItem('name', response.data.name);
       // Redirect to dashboard or home page
       navigate('/dashboard');
     } catch (error) {

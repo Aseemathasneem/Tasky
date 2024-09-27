@@ -4,10 +4,13 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
+const http = require('http');
+const { initializeSocket } = require('./socket'); 
 
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
 
 // Middleware
 app.use(cors());
@@ -18,10 +21,14 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-  app.use('/api/auth', authRoutes);
-  app.use('/api', taskRoutes);
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api', taskRoutes);
+
+// Initialize Socket.io
+initializeSocket(server); // Call your socket.io initialization function here
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {  // Use 'server.listen' instead of 'app.listen'
   console.log(`Server running on port ${PORT}`);
 });

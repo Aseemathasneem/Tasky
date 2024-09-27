@@ -13,10 +13,10 @@ function App() {
       <div>
         
         <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Dashboard />} />
-          <Route path="/add-task" element={<AddTask />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/add-task" element={<AddTask />} />
         </Routes>
       </div>
       </Layout>
