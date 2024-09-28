@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Set your base URL here
+  baseURL: import.meta.env.VITE_BACKEND_URL + '/api',
 });
 
 // Set the Authorization header dynamically for all requests
