@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [selectedTask, setSelectedTask] = useState(null); 
   const [socket, setSocket] = useState(null);  
 
- 
+  // Fetch tasks on initial render
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -26,30 +26,37 @@ const Dashboard = () => {
     fetchTasks();
   }, []);
 
-  
+  // Initialize socket connection with token
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_BACKEND_URL); 
-    setSocket(newSocket); 
+    const token = localStorage.getItem('token'); // Get token from localStorage
 
-    // Listen for 'taskUpdated' event from the server
-    newSocket.on('taskUpdated', (updatedTask) => {
-      console.log('Task updated:', updatedTask);
-     
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task._id === updatedTask._id ? updatedTask : task
-        )
-      );
-    });
-
-    // Clean up the socket connection on component unmount
-    return () => newSocket.close();
+    if (token) {
+      const newSocket = io(import.meta.env.VITE_BACKEND_URL, {
+        auth: {
+          token, // Send token as part of auth payload
+        },
+      });
+  
+      setSocket(newSocket);
+  
+      // Listen for 'taskUpdated' event from the server
+      newSocket.on('taskUpdated', (updatedTask) => {
+        console.log('Task updated:', updatedTask);
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task._id === updatedTask._id ? updatedTask : task
+          )
+        );
+      });
+  
+      // Clean up the socket connection on component unmount
+      return () => newSocket.close();
+    }
   }, []);
 
   const handleDelete = async (taskId) => {
     try {
       await api.delete(`/tasks/${taskId}`);
-      // Remove the deleted task from state
       setTasks(tasks.filter(task => task._id !== taskId));
       console.log(`Task with ID ${taskId} deleted successfully.`);
     } catch (error) {
@@ -58,18 +65,15 @@ const Dashboard = () => {
   };
 
   const handleEdit = (taskId) => {
-    const taskToEdit = tasks.find((task) => task._id === taskId); // Find the task by ID
-    setSelectedTask(taskToEdit); // Set the selected task for editing
-    setModalOpen(true); // Open the modal
+    const taskToEdit = tasks.find((task) => task._id === taskId);
+    setSelectedTask(taskToEdit); 
+    setModalOpen(true); 
   };
 
   const handleUpdateTask = async (updatedTask) => {
     try {
-      // Make API call to update the task in the backend
       const response = await api.put(`/tasks/${updatedTask._id}`, updatedTask);
-  
       setTasks(tasks.map((task) => (task._id === updatedTask._id ? response.data : task)));
-  
       setModalOpen(false); 
       console.log('Task updated successfully:', response.data);
     } catch (error) {
@@ -81,17 +85,11 @@ const Dashboard = () => {
     <div className="dashboard-container p-6 flex flex-col lg:flex-row lg:gap-6">
       <div className="lg:w-2/3">
         <h1 className="text-3xl font-bold mb-6">All Tasks</h1>
-        
-        {/* Task List - Directly using TaskList component without extra grid */}
         <TaskList tasks={tasks} handleDelete={handleDelete} handleEdit={handleEdit} />
       </div>
-  
       <div className="lg:w-1/3 mt-6 lg:mt-0">
-        {/* TaskStats on the right side */}
         <TaskStats />
       </div>
-  
-      {/* Modal for editing tasks */}
       <Modal
         show={isModalOpen}
         size="md"

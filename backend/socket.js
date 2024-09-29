@@ -1,5 +1,5 @@
-
 const socketIO = require('socket.io');
+const {socketAuth} = require('./middleware/authMiddleware'); 
 
 let io;
 
@@ -12,9 +12,12 @@ const initializeSocket = (server) => {
     },
   });
 
+  // Use the custom Socket.io authorization middleware
+  io.use(socketAuth);
+
   // Event handler for connection
   io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.id}`);
+    console.log(`User connected: ${socket.user.id}`); // Access user info from the decoded token
 
     // Example of real-time task updates
     socket.on('taskUpdated', (task) => {

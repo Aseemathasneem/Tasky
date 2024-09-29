@@ -29,4 +29,24 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = verifyToken;
+
+const socketAuth = (socket, next) => {
+  const token = socket.handshake.auth.token; // Get token from client-side auth object
+
+  if (!token) {
+    const err = new Error("Authentication error: Token not provided");
+    return next(err); // Stop connection if no token is provided
+  }
+
+  try {
+    // Verify the token using your secret key
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.user = decoded; // Attach user info from the decoded token to the socket object
+
+    return next(); // Call next to allow the connection
+  } catch (err) {
+    return next(new Error("Authentication error: Invalid token"));
+  }
+};
+
+module.exports = {verifyToken,socketAuth};
