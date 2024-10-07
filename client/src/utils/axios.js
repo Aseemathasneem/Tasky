@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL + '/api',
 });
 
-// Set the Authorization header dynamically for all requests
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token'); // Fetch the token from localStorage
   if (token) {
