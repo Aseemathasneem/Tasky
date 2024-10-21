@@ -29,6 +29,6 @@ app.use('/api', taskRoutes);
 initializeSocket(server); // Call your socket.io initialization function here
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {  // Use 'server.listen' instead of 'app.listen'
+server.listen(PORT, () => { 
   console.log(`Server running on port ${PORT}`);
 });

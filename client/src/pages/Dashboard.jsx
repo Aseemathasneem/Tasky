@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import TaskList from '../components/TaskList';
-import { Modal } from 'flowbite-react';
-import api from '../utils/axios';
-import TaskEditForm from '../components/TaskEditForm'; 
 import TaskStats from '../components/TaskStats';
-import { io } from 'socket.io-client';  
+import api from '../utils/axios';
+import { io } from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
-  const [isModalOpen, setModalOpen] = useState(false); 
-  const [selectedTask, setSelectedTask] = useState(null); 
   const [socket, setSocket] = useState(null);  
+  const navigate = useNavigate(); // Add the useNavigate hook
 
   // Fetch tasks on initial render
   useEffect(() => {
@@ -66,19 +64,7 @@ const Dashboard = () => {
 
   const handleEdit = (taskId) => {
     const taskToEdit = tasks.find((task) => task._id === taskId);
-    setSelectedTask(taskToEdit); 
-    setModalOpen(true); 
-  };
-
-  const handleUpdateTask = async (updatedTask) => {
-    try {
-      const response = await api.put(`/tasks/${updatedTask._id}`, updatedTask);
-      setTasks(tasks.map((task) => (task._id === updatedTask._id ? response.data : task)));
-      setModalOpen(false); 
-      console.log('Task updated successfully:', response.data);
-    } catch (error) {
-      console.error('Error updating task:', error);
-    }
+    navigate(`/edit-task/${taskId}`, { state: { task: taskToEdit } }); // Pass the task via router state
   };
 
   return (
@@ -90,18 +76,6 @@ const Dashboard = () => {
       <div className="lg:w-1/3 mt-6 lg:mt-0">
         <TaskStats />
       </div>
-      <Modal
-        show={isModalOpen}
-        size="md"
-        onClose={() => setModalOpen(false)}
-      >
-        <div className="w-full max-w-lg max-h-[80vh] overflow-auto">
-          <Modal.Header>Edit Task</Modal.Header>
-          <Modal.Body>
-            <TaskEditForm task={selectedTask} onSubmit={handleUpdateTask} />
-          </Modal.Body>
-        </div>
-      </Modal>
     </div>
   );
 };
