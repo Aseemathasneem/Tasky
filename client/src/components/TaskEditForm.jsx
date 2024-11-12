@@ -9,19 +9,19 @@ const TaskEditForm = ({ task, onSubmit }) => {
     dueDate: task?.dueDate || ''
   });
 
-  const [error, setError] = useState(''); // State to track validation errors
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate the due date (for example, ensuring it's not in the past)
-    const currentDate = new Date().toISOString().split('T')[0]; // Today's date in YYYY-MM-DD format
+   
+    const currentDate = new Date().toISOString().split('T')[0]; 
     if (formData.dueDate < currentDate) {
       setError('Due date cannot be in the past!');
-      return; // Don't submit the form if there's an error
+      return; 
     }
 
-    setError(''); // Clear error if validation passes
+    setError(''); 
     onSubmit({ ...task, ...formData }); 
   };
 

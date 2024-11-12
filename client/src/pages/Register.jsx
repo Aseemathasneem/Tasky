@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/axios'
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -20,7 +20,7 @@ const Register = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/api/auth/register', { name, email, password }); 
+      await api.post('/auth/register', { name, email, password }); 
 
       // Redirect to login after successful registration
       navigate('/login');

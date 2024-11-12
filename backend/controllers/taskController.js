@@ -92,16 +92,18 @@ const updateTask = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message }); 
   }
 };
-
 const taskStats = async (req, res) => {
   try {
-    const completedTasks = await Task.countDocuments({ status: 'completed' });
-    const pendingTasks = await Task.countDocuments({ status: 'pending' });
-    const inProgressTasks = await Task.countDocuments({ status: 'in-progress' });
+   
+    const userId = req.user;
 
-    // Optionally, calculate overdue tasks (e.g., based on dueDate)
+    const completedTasks = await Task.countDocuments({ user: userId, status: 'completed' });
+    const pendingTasks = await Task.countDocuments({ user: userId, status: 'pending' });
+    const inProgressTasks = await Task.countDocuments({ user: userId, status: 'in-progress' });
+
+   
     const currentDate = new Date();
-    const overdueTasks = await Task.countDocuments({ dueDate: { $lt: currentDate }, status: 'pending' });
+    const overdueTasks = await Task.countDocuments({ user: userId, dueDate: { $lt: currentDate }, status: 'pending' });
 
     res.json({
       completed: completedTasks,
@@ -113,5 +115,7 @@ const taskStats = async (req, res) => {
     res.status(500).json({ message: 'Error retrieving task statistics', error });
   }
 };
+
+
 
 module.exports = { getTasks, addTask, deleteTask, updateTask,taskStats };

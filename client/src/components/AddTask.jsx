@@ -11,23 +11,23 @@ const AddTask = () => {
     priority: 'medium',
     dueDate: ''
   });
-  const [errorMessage, setErrorMessage] = useState(''); // Error message for date validation
+  const [errorMessage, setErrorMessage] = useState(''); 
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    setErrorMessage(''); // Clear error when input changes
+    setErrorMessage(''); 
   };
 
   const validateDueDate = () => {
     const selectedDate = new Date(formData.dueDate);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set today's time to midnight for accurate comparison
+    today.setHours(0, 0, 0, 0); 
     
     if (selectedDate < today) {
-      return false; // Invalid if due date is in the past
+      return false; 
     }
     return true;
   };
@@ -35,10 +35,10 @@ const AddTask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if due date is valid
+   
     if (!validateDueDate()) {
       setErrorMessage('Due date cannot be in the past.');
-      return; // Prevent form submission
+      return; 
     }
 
     try {

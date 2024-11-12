@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
-  const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown is initially closed
+  const [dropdownOpen, setDropdownOpen] = useState(false); 
 
-  // Get user name from localStorage
+  
   const name = localStorage.getItem('name');
 
   // Handle logout
@@ -26,12 +26,12 @@ const Header = () => {
     <img 
       src="/images/tasky-logo.jpeg" 
       alt="Tasky Logo"
-      className="h-8 w-8 mr-2" // Adjust size as needed
+      className="h-8 w-8 mr-2" 
     />
    
   </div>
 
-      {/* If logged in, show user name and dropdown */}
+     
       {name ? (
         <div className="relative">
           {/* User name and dropdown toggle */}
@@ -57,7 +57,7 @@ const Header = () => {
           </button>
 
           {/* Dropdown menu */}
-          {dropdownOpen && ( // Only show dropdown when dropdownOpen is true
+          {dropdownOpen && ( 
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
               <a
                 href="#"

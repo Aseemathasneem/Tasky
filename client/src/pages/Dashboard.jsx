@@ -8,9 +8,9 @@ import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [socket, setSocket] = useState(null);  
-  const navigate = useNavigate(); // Add the useNavigate hook
+  const navigate = useNavigate(); 
 
-  // Fetch tasks on initial render
+ 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -47,7 +47,7 @@ const Dashboard = () => {
         );
       });
   
-      // Clean up the socket connection on component unmount
+     
       return () => newSocket.close();
     }
   }, []);
@@ -64,7 +64,7 @@ const Dashboard = () => {
 
   const handleEdit = (taskId) => {
     const taskToEdit = tasks.find((task) => task._id === taskId);
-    navigate(`/edit-task/${taskId}`, { state: { task: taskToEdit } }); // Pass the task via router state
+    navigate(`/edit-task/${taskId}`, { state: { task: taskToEdit } }); 
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/axios'
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,12 +13,12 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
+      const response = await api.post('/auth/login', { email, password });
       
       
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('name', response.data.name);
-      // Redirect to dashboard or home page
+      
       navigate('/dashboard');
     } catch (error) {
       setError('Invalid credentials. Please try again.');
