@@ -23,7 +23,7 @@ const Register = () => {
       await api.post('/auth/register', { name, email, password }); 
 
       // Redirect to login after successful registration
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       setError('Registration failed. Try again.');
     }
@@ -37,7 +37,7 @@ const Register = () => {
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
         <form onSubmit={handleRegister}>
-          {/* Name field */}
+          
           <div className="mb-4">
             <label className="block text-gray-700 mb-2" htmlFor="name">Name</label>
             <input
